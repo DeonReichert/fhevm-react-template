@@ -1,0 +1,36 @@
+{
+  "name": "@fhevm-template/fhe-sdk",
+  "version": "1.0.0",
+  "description": "Core SDK for FHE operations with fhevmjs",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "fhe",
+    "fhevm",
+    "zama",
+    "encryption",
+    "sdk"
+  ],
+  "author": "FHE Template Contributors",
+  "license": "MIT",
+  "peerDependencies": {
+    "fhevmjs": "^0.5.0",
+    "ethers": "^6.10.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "@types/node": "^20.11.0"
+  }
+}
