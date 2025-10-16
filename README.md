@@ -1,170 +1,227 @@
-# FHEVM React Template
+# FHE React Template
 
-A minimal React frontend template for building FHEVM-enabled decentralized applications (dApps). This template provides a simple development interface for interacting with FHEVM smart contracts, specifically the `FHECounter.sol` contract.
+A comprehensive template and example collection for building privacy-preserving decentralized applications using Zama's Fully Homomorphic Encryption (FHE) technology.
 
-## 🚀 What is FHEVM?
+## 🎯 Overview
 
-FHEVM (Fully Homomorphic Encryption Virtual Machine) enables computation on encrypted data directly on Ethereum. This template demonstrates how to build dApps that can perform computations while keeping data private.
+This template provides a production-ready foundation for developing FHE-powered dApps with React, featuring:
 
-## ✨ Features
+- **FHE Integration**: Built-in support for Zama's fhEVM
+- **Modern Stack**: React 18, TypeScript, Vite
+- **Wallet Support**: RainbowKit integration with multiple wallet connectors
+- **Smart Contract Tools**: Hardhat development environment
+- **Example Applications**: Real-world FHE use cases
 
-- **🔐 FHEVM Integration**: Built-in support for fully homomorphic encryption
-- **⚛️ React + Next.js**: Modern, performant frontend framework
-- **🎨 Tailwind CSS**: Utility-first styling for rapid UI development
-- **🔗 RainbowKit**: Seamless wallet connection and management
-- **🌐 Multi-Network Support**: Works on both Sepolia testnet and local Hardhat node
-- **📦 Monorepo Structure**: Organized packages for SDK, contracts, and frontend
+## 📚 What is FHE?
 
-## 📋 Prerequinextjss
+Fully Homomorphic Encryption (FHE) allows computations to be performed directly on encrypted data without decryption. This enables:
 
-Before you begin, ensure you have:
+- Complete data privacy during processing
+- Confidential smart contract execution
+- Zero-knowledge operations on blockchain
+- Secure multi-party computation
 
-- **Node.js** (v18 or higher)
-- **pnpm** package manager
-- **MetaMask** browser extension
-- **Git** for cloning the repository
+## 🚀 Quick Start
 
-## 🛠️ Quick Start
+### Prerequisites
 
-### 1. Clone and Setup
+- Node.js 20+
+- npm or yarn
+- MetaMask or compatible Web3 wallet
+
+### Installation
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/DeonReichert/fhevm-react-template.git
 cd fhevm-react-template
 
-# Initialize submodules (includes fhevm-hardhat-template)
-git submodule update --init --recursive
-
 # Install dependencies
-pnpm install
+npm install
+
+# Copy environment variables
+cp .env.example .env
+
+# Configure your private key and RPC URL in .env
 ```
 
-### 2. Environment Configuration
-
-Set up your Hardhat environment variables by following the [FHEVM documentation](https://docs.zama.ai/protocol/solidity-guides/getting-started/setup#set-up-the-hardhat-configuration-variables-optional):
-
-- `MNEMONIC`: Your wallet mnemonic phrase
-- `INFURA_API_KEY`: Your Infura API key for Sepolia
-
-### 3. Start Development Environment
-
-**Option A: Local Development (Recommended for testing)**
+### Development
 
 ```bash
-# Terminal 1: Start local Hardhat node
-pnpm chain
-# RPC URL: http://127.0.0.1:8545 | Chain ID: 31337
+# Start development server
+npm run dev
 
-# Terminal 2: Deploy contracts to localhost
-pnpm deploy:localhost
+# Compile smart contracts
+npm run compile
 
-# Terminal 3: Start the frontend
-pnpm start
+# Run tests
+npm test
+
+# Deploy contracts (testnet)
+npm run deploy
 ```
-
-**Option B: Sepolia Testnet**
-
-```bash
-# Deploy to Sepolia testnet
-pnpm deploy:sepolia
-
-# Start the frontend
-pnpm start
-```
-
-### 4. Connect MetaMask
-
-1. Open [http://localhost:3000](http://localhost:3000) in your browser
-2. Click "Connect Wallet" and select MetaMask
-3. If using localhost, add the Hardhat network to MetaMask:
-   - **Network Name**: Hardhat Local
-   - **RPC URL**: `http://127.0.0.1:8545`
-   - **Chain ID**: `31337`
-   - **Currency Symbol**: `ETH`
-
-### ⚠️ Sepolia Production note
-
-- In production, `NEXT_PUBLIC_ALCHEMY_API_KEY` must be set (see `packages/nextjs/scaffold.config.ts`). The app throws if missing.
-- Ensure `packages/nextjs/contracts/deployedContracts.ts` points to your live contract addresses.
-- Optional: set `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID` for better WalletConnect reliability.
-- Optional: add per-chain RPCs via `rpcOverrides` in `packages/nextjs/scaffold.config.ts`.
-
-## 🔧 Troubleshooting
-
-### Common MetaMask + Hardhat Issues
-
-When developing with MetaMask and Hardhat, you may encounter these common issues:
-
-#### ❌ Nonce Mismatch Error
-
-**Problem**: MetaMask tracks transaction nonces, but when you restart Hardhat, the node resets while MetaMask doesn't update its tracking.
-
-**Solution**:
-1. Open MetaMask extension
-2. Select the Hardhat network
-3. Go to **Settings** → **Advanced**
-4. Click **"Clear Activity Tab"** (red button)
-5. This resets MetaMask's nonce tracking
-
-#### ❌ Cached View Function Results
-
-**Problem**: MetaMask caches smart contract view function results. After restarting Hardhat, you may see outdated data.
-
-**Solution**:
-1. **Restart your entire browser** (not just refresh the page)
-2. MetaMask's cache is stored in extension memory and requires a full browser restart to clear
-
-> 💡 **Pro Tip**: Always restart your browser after restarting Hardhat to avoid cache issues.
-
-For more details, see the [MetaMask development guide](https://docs.metamask.io/wallet/how-to/run-devnet/).
 
 ## 📁 Project Structure
 
-This template uses a monorepo structure with three main packages:
-
 ```
 fhevm-react-template/
-├── packages/
-│   ├── fhevm-hardhat-template/    # Smart contracts & deployment
-│   ├── fhevm-sdk/                 # FHEVM SDK package
-│   └── nextjs/                      # React frontend application
-└── scripts/                       # Build and deployment scripts
+├── examples/                    # Example applications
+│   └── confidential-land-platform/
+│       ├── contracts/          # Smart contracts
+│       ├── src/               # React frontend
+│       ├── scripts/           # Deployment scripts
+│       ├── test/              # Contract tests
+│       └── README.md          # Example documentation
+├── src/                       # Template source code
+├── demo.mp4                   # Video demonstration
+├── package.json
+└── README.md
 ```
 
-### Key Components
+## 💡 Example Applications
 
-#### 🔗 FHEVM Integration (`packages/nextjs/hooks/fhecounter-example/`)
-- **`useFHECounterWagmi.tsx`**: Example hook demonstrating FHEVM contract interaction
-- Essential hooks for FHEVM-enabled smart contract communication
-- Easily copyable to any FHEVM + React project
+### Confidential Land Platform
 
-#### 🎣 Wallet Management (`packages/nextjs/hooks/helper/`)
-- MetaMask wallet provider hooks
-- Compatible with EIP-6963 standard
-- Easily adaptable for other wallet providers
+A privacy-preserving urban planning platform demonstrating:
 
-#### 🔧 Flexibility
-- Replace `ethers.js` with `Wagmi` or other React-friendly libraries
-- Modular architecture for easy customization
-- Support for multiple wallet providers
+- **FHE-Encrypted Land Registry**: Sensitive property data remains confidential
+- **Private Urban Analytics**: Population density and infrastructure metrics
+- **Confidential Project Evaluation**: Development proposals analyzed without data exposure
+- **Role-Based Access Control**: Secure permission management
 
-## 📚 Additional Resources
+[View Full Documentation →](./examples/confidential-land-platform/README.md)
 
-### Official Documentation
-- [FHEVM Documentation](https://docs.zama.ai/protocol/solidity-guides/) - Complete FHEVM guide
-- [FHEVM Hardhat Guide](https://docs.zama.ai/protocol/solidity-guides/development-guide/hardhat) - Hardhat integration
-- [Relayer SDK Documentation](https://docs.zama.ai/protocol/relayer-sdk-guides/) - SDK reference
-- [Environment Setup](https://docs.zama.ai/protocol/solidity-guides/getting-started/setup#set-up-the-hardhat-configuration-variables-optional) - MNEMONIC & API keys
+**Key Features:**
+- Zone registration with encrypted attributes
+- Project submission system
+- Real-time encrypted metrics analysis
+- Glassmorphism UI design
+- Multi-wallet support
 
-### Development Tools
-- [MetaMask + Hardhat Setup](https://docs.metamask.io/wallet/how-to/run-devnet/) - Local development
-- [React Documentation](https://reactjs.org/) - React framework guide
+**Technology Stack:**
+- Solidity + Zama fhEVM
+- React 18 + TypeScript + Vite
+- RainbowKit + wagmi
+- Radix UI + Tailwind CSS
+- Hardhat + Ethers.js
 
-### Community & Support
-- [FHEVM Discord](https://discord.com/invite/zama) - Community support
-- [GitHub Issues](https://github.com/zama-ai/fhevm-react-template/issues) - Bug reports & feature requests
+**Live Demo:** [https://land-platform-chi.vercel.app/](https://land-platform-chi.vercel.app/)
+
+## 🎬 Video Demonstration
+
+See `demo.mp4` for a complete walkthrough of:
+- Setting up the development environment
+- Deploying FHE contracts
+- Building privacy-preserving UI
+- Testing encrypted operations
+- Wallet integration
+
+## 🔧 Configuration
+
+### Environment Variables
+
+Create `.env` file with:
+
+```env
+PRIVATE_KEY=your_private_key_here
+SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR_KEY
+WALLETCONNECT_PROJECT_ID=your_project_id
+```
+
+### Network Configuration
+
+Supports:
+- Sepolia Testnet (default)
+- Local Hardhat Network
+- Custom FHE networks
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+npm test
+
+# Run with coverage
+npm run test:coverage
+
+# Run gas report
+npm run test:gas
+
+# Test specific file
+npx hardhat test test/YourContract.test.js
+```
+
+## 📦 Building
+
+```bash
+# Build frontend
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## 🔐 Security Best Practices
+
+1. **Never commit private keys** - Use environment variables
+2. **Validate FHE inputs** - Ensure encrypted data integrity
+3. **Implement access control** - Use OpenZeppelin contracts
+4. **Audit smart contracts** - Before mainnet deployment
+5. **Test thoroughly** - Cover all encryption scenarios
+
+## 🛠️ Development Tools
+
+### Smart Contracts
+- Hardhat - Development environment
+- OpenZeppelin - Security libraries
+- Zama fhEVM - FHE functionality
+- Ethers.js - Blockchain interaction
+
+### Frontend
+- Vite - Build tool
+- React 18 - UI framework
+- TypeScript - Type safety
+- Tailwind CSS - Styling
+- RainbowKit - Wallet integration
+
+## 📖 Resources
+
+- [Zama Documentation](https://docs.zama.ai/)
+- [fhEVM Guide](https://docs.zama.ai/fhevm)
+- [Hardhat Docs](https://hardhat.org/docs)
+- [React Documentation](https://react.dev/)
+
+## 🤝 Contributing
+
+Contributions welcome! Please:
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
 
 ## 📄 License
 
-This project is licensed under the **BSD-3-Clause-Clear License**. See the [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](LICENSE) file for details
+
+## 🏆 Competition Submission
+
+This template was created for the Zama FHE Competition 2025, demonstrating practical applications of fully homomorphic encryption in decentralized applications.
+
+### Submission Contents
+
+- ✅ Complete React + FHE template
+- ✅ Production-ready example application
+- ✅ Comprehensive documentation
+- ✅ Video demonstration (demo.mp4)
+- ✅ Test coverage
+- ✅ Deployment scripts
+
+## 📧 Contact
+
+For questions or support, please open an issue on GitHub.
+
+---
+
+**Built with ❤️ using Zama FHE Technology**
