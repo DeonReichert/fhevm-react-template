@@ -10,14 +10,20 @@
  */
 
 export { createFhevmClient, type FhevmClient } from './client';
-export { useFhevm } from './hooks';
+export {
+  useFhevm,
+  useEncrypt,
+  useDecrypt,
+  useBatchEncrypt,
+  useFhevmStatus
+} from './hooks';
 export { encrypt, decrypt, createEncryptedInput } from './encryption';
 export { FhevmProvider, useFhevmContext } from './provider';
-export type { 
-  FhevmConfig, 
-  EncryptedValue, 
+export type {
+  FhevmConfig,
+  EncryptedValue,
   DecryptedValue,
-  FhevmInstance 
+  FhevmInstance
 } from './types';
 
 // Re-export fhevmjs types for convenience
