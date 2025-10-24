@@ -1,0 +1,53 @@
+================================================================================
+                        DEMO VIDEO RECORDING NEEDED
+================================================================================
+
+Please record a demo.mp4 video showing:
+
+1. Project Overview (1 minute)
+   - Introduce the FHE React Template
+   - Explain privacy-preserving features
+   - Show the Confidential Land Platform example
+
+2. Installation & Setup (2 minutes)
+   - Clone repository
+   - npm install
+   - Configure .env file
+   - Start development server
+
+3. Smart Contract Walkthrough (3 minutes)
+   - Show ConfidentialLandPlatform.sol
+   - Explain FHE encryption usage
+   - Demonstrate compile and deploy
+
+4. Frontend Demo (4 minutes)
+   - Connect wallet
+   - Register encrypted zone
+   - Submit confidential project
+   - View analytics
+
+5. Live Application (4 minutes)
+   - Visit: https://land-platform-chi.vercel.app/
+   - Demonstrate full user flow
+   - Show transaction on Sepolia explorer
+
+6. Conclusion (1 minute)
+   - Recap key features
+   - Emphasize privacy benefits
+   - Thank viewers
+
+Total Duration: 12-15 minutes
+Format: MP4 (H.264 codec)
+Resolution: 1920x1080 minimum
+Audio: Clear narration
+
+Recording Tools:
+- OBS Studio (free, open source)
+- Loom (web-based)
+- QuickTime (Mac)
+- Windows Game Bar (Windows)
+
+After recording, save as: demo.mp4
+Place in: D:\fhevm-react-template\
+
+================================================================================
