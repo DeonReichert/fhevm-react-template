@@ -1,0 +1,42 @@
+{
+  "name": "confidential-land-platform",
+  "version": "1.0.0",
+  "description": "Privacy-Preserving Urban Planning Platform with FHE",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "compile": "hardhat compile",
+    "deploy": "hardhat run scripts/deploy.js --network sepolia",
+    "test": "hardhat test"
+  },
+  "keywords": [
+    "fhe",
+    "blockchain",
+    "privacy",
+    "urban-planning",
+    "zama",
+    "fhevm"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@rainbow-me/rainbowkit": "^2.0.0",
+    "@tanstack/react-query": "^5.17.19",
+    "ethers": "^6.10.0",
+    "fhevmjs": "^0.5.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "viem": "^2.7.1",
+    "wagmi": "^2.5.0"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^5.0.4",
+    "hardhat": "^2.19.5",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.11"
+  }
+}
