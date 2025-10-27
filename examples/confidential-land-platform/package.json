@@ -21,6 +21,8 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@fhevm-template/fhe-sdk": "workspace:*",
+    "@fhevm-template/fhevm-sdk": "workspace:*",
     "@rainbow-me/rainbowkit": "^2.0.0",
     "@tanstack/react-query": "^5.17.19",
     "ethers": "^6.10.0",
