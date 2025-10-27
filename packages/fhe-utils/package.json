@@ -1,0 +1,32 @@
+{
+  "name": "@fhevm-template/fhe-utils",
+  "version": "1.0.0",
+  "description": "Utility functions for FHE operations",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "fhe",
+    "fhevm",
+    "zama",
+    "utilities",
+    "encryption"
+  ],
+  "author": "FHE Template Contributors",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "@types/node": "^20.11.0"
+  }
+}
