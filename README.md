@@ -12,6 +12,14 @@ This repository provides a complete SDK and template collection for developing F
 - **Complete Templates**: Production-ready Next.js and React examples
 - **Comprehensive Docs**: Full documentation and real-world examples
 
+## 🌐 Live Demo
+
+**Website**: [https://land-platform-chi.vercel.app/](https://land-platform-chi.vercel.app/)
+
+**Video Demo**: demo.mp4
+
+**Smart Contract**: [`0xba4FB3D706a6754FFbcF9B01Cc3176F003343d11`](https://sepolia.etherscan.io/address/0xba4FB3D706a6754FFbcF9B01Cc3176F003343d11)
+
 ## 📚 What is FHE?
 
 Fully Homomorphic Encryption (FHE) allows computations to be performed directly on encrypted data without decryption. This enables:
