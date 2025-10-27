@@ -1,16 +1,16 @@
-# FHE React Template
+# Universal FHEVM SDK
 
-A comprehensive template and example collection for building privacy-preserving decentralized applications using Zama's Fully Homomorphic Encryption (FHE) technology.
+A framework-agnostic SDK for building privacy-preserving decentralized applications using Zama's Fully Homomorphic Encryption (FHE) technology.
 
 ## 🎯 Overview
 
-This template provides a production-ready foundation for developing FHE-powered dApps with React, featuring:
+This repository provides a complete SDK and template collection for developing FHE-powered applications:
 
-- **FHE Integration**: Built-in support for Zama's fhEVM
-- **Modern Stack**: React 18, TypeScript, Vite
-- **Wallet Support**: RainbowKit integration with multiple wallet connectors
-- **Smart Contract Tools**: Hardhat development environment
-- **Example Applications**: Real-world FHE use cases
+- **Universal SDK**: Framework-agnostic core that works with React, Next.js, Vue, Node.js
+- **Simple Setup**: Less than 10 lines of code to get started
+- **React Adapter**: Pre-built hooks and providers (wagmi-style API)
+- **Complete Templates**: Production-ready Next.js and React examples
+- **Comprehensive Docs**: Full documentation and real-world examples
 
 ## 📚 What is FHE?
 
@@ -23,89 +23,175 @@ Fully Homomorphic Encryption (FHE) allows computations to be performed directly 
 
 ## 🚀 Quick Start
 
-### Prerequisites
-
-- Node.js 20+
-- npm or yarn
-- MetaMask or compatible Web3 wallet
-
 ### Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/DeonReichert/fhevm-react-template.git
-cd fhevm-react-template
-
-# Install dependencies
-npm install
-
-# Copy environment variables
-cp .env.example .env
-
-# Configure your private key and RPC URL in .env
+# Install the SDK
+npm install @fhevm-template/fhevm-sdk fhevmjs ethers
 ```
 
-### Development
+### Basic Usage
 
-```bash
-# Start development server
-npm run dev
+```typescript
+import { createFhevmClient, encryptValue } from '@fhevm-template/fhevm-sdk';
 
-# Compile smart contracts
-npm run compile
+// Create client
+const client = createFhevmClient({
+  network: window.ethereum,
+  gatewayUrl: 'https://gateway.zama.ai'
+});
 
-# Run tests
-npm test
-
-# Deploy contracts (testnet)
-npm run deploy
+// Encrypt data
+const encrypted = await encryptValue(client, {
+  contractAddress: '0x...',
+  userAddress: '0x...',
+  value: 50000,
+  type: 'uint64'
+});
 ```
 
-## 📁 Project Structure
+### React/Next.js Setup
+
+```tsx
+import { createFhevmClient, FhevmProvider, useFhevm } from '@fhevm-template/fhevm-sdk';
+
+const client = createFhevmClient({
+  network: window.ethereum,
+  gatewayUrl: 'https://gateway.zama.ai'
+});
+
+// Wrap your app
+<FhevmProvider client={client}>
+  <App />
+</FhevmProvider>
+
+// Use in components
+function MyComponent() {
+  const { encrypt, isReady } = useFhevm();
+
+  const handleEncrypt = async () => {
+    const encrypted = await encrypt(contractAddr, userAddr, {
+      value: 50000,
+      type: 'uint64'
+    });
+  };
+}
+```
+
+## 📁 Repository Structure
 
 ```
 fhevm-react-template/
-├── examples/                    # Example applications
-│   └── confidential-land-platform/
-│       ├── contracts/          # Smart contracts
-│       ├── src/               # React frontend
-│       ├── scripts/           # Deployment scripts
-│       ├── test/              # Contract tests
-│       └── README.md          # Example documentation
-├── src/                       # Template source code
-├── demo.mp4                   # Video demonstration
-├── package.json
+├── packages/                           # SDK packages
+│   ├── fhevm-sdk/                     # Core FHEVM SDK (universal)
+│   │   ├── src/
+│   │   │   ├── core/                  # Framework-agnostic core
+│   │   │   ├── adapters/              # Framework adapters (React)
+│   │   │   └── utils/                 # Encryption/decryption utilities
+│   │   ├── package.json
+│   │   └── README.md
+│   ├── fhe-sdk/                       # FHE SDK wrapper
+│   │   └── src/                       # Core FHE operations
+│   └── fhe-utils/                     # Utility functions
+│       └── src/                       # Formatting, conversion, constants
+│
+├── templates/                          # Ready-to-use templates
+│   └── nextjs/                        # Next.js 14 template
+│       └── nextjs-fhe-demo/           # Template boilerplate
+│
+├── examples/                           # Example applications
+│   ├── nextjs-complete-template/      # Complete Next.js example (NEW)
+│   │   ├── src/app/                   # App Router with API routes
+│   │   ├── src/components/            # UI and FHE components
+│   │   ├── src/hooks/                 # Custom React hooks
+│   │   ├── src/lib/                   # FHE utilities
+│   │   └── src/types/                 # TypeScript types
+│   ├── nextjs-fhe-demo/               # Next.js demo
+│   ├── confidential-land-platform/    # Land registry example
+│   └── land-platform-static/          # Static deployment artifact
+│
+├── docs/                              # Documentation
+│   ├── getting-started.md
+│   ├── api-reference.md
+│   ├── examples.md
+│   ├── architecture.md
+│   └── deployment.md
+│
+├── demo.mp4                           # Video demonstration
 └── README.md
 ```
 
-## 💡 Example Applications
+## 📦 SDK Packages
 
-### Confidential Land Platform
+### Core FHEVM SDK (`@fhevm-template/fhevm-sdk`)
 
-A privacy-preserving urban planning platform demonstrating:
+Universal framework-agnostic SDK for FHE operations:
+- **Framework Agnostic**: Core works with any JavaScript framework or vanilla JS
+- **Simple API**: wagmi-inspired design for intuitive usage
+- **Type Safe**: Complete TypeScript support with full type definitions
+- **Encryption**: Support for uint8, uint16, uint32, uint64, bool, and address types
+- **Decryption**: Full decryption workflow with EIP-712 signatures
+- **Batch Operations**: Encrypt multiple values in single operation
+- **Validation**: Built-in input validation and security checks
 
-- **FHE-Encrypted Land Registry**: Sensitive property data remains confidential
-- **Private Urban Analytics**: Population density and infrastructure metrics
-- **Confidential Project Evaluation**: Development proposals analyzed without data exposure
-- **Role-Based Access Control**: Secure permission management
+### React Adapter
 
-[View Full Documentation →](./examples/confidential-land-platform/README.md)
+- **Hooks**: `useFhevm`, `useEncrypt`, `useDecrypt`
+- **Provider**: `FhevmProvider` for app-wide FHE state
+- **Auto-init**: Automatic SDK initialization
+- **Loading States**: Built-in loading and error state management
 
-**Key Features:**
-- Zone registration with encrypted attributes
-- Project submission system
-- Real-time encrypted metrics analysis
-- Glassmorphism UI design
-- Multi-wallet support
+### FHE SDK Wrapper (`@fhevm-template/fhe-sdk`)
 
-**Technology Stack:**
-- Solidity + Zama fhEVM
-- React 18 + TypeScript + Vite
-- RainbowKit + wagmi
-- Radix UI + Tailwind CSS
-- Hardhat + Ethers.js
+Simplified wrapper around fhevmjs:
+- Direct fhevmjs integration
+- Client-side encryption utilities
+- React hooks and providers
+- Streamlined API
 
-**Live Demo:** [https://land-platform-chi.vercel.app/](https://land-platform-chi.vercel.app/)
+### FHE Utils (`@fhevm-template/fhe-utils`)
+
+Utility functions for FHE operations:
+- **Formatting**: Format encrypted data, addresses, timestamps, bytes, durations
+- **Conversion**: Convert between hex, bytes, base64, strings, and numbers
+- **Constants**: FHE data types, max values, byte sizes, timeouts, operations
+
+## 💡 Templates & Examples
+
+### Next.js Template
+
+Complete Next.js 14 template with App Router:
+- [templates/nextjs](./templates/nextjs)
+- SDK integration with RainbowKit
+- Encryption/decryption demos
+- Production-ready configuration
+
+### Example Applications
+
+#### Next.js Complete Template (NEW)
+Full-featured Next.js 13+ App Router template with comprehensive FHE integration:
+- [examples/nextjs-complete-template](./examples/nextjs-complete-template)
+- Complete API routes for FHE operations (encrypt, decrypt, compute, keys)
+- Custom React hooks (useFHE, useEncryption, useComputation)
+- Real-world examples (Banking, Medical Records)
+- Full TypeScript support
+- Production-ready architecture
+
+#### Next.js FHE Demo
+Basic demonstration of SDK features:
+- [examples/nextjs-fhe-demo](./examples/nextjs-fhe-demo)
+- Encryption demo with all data types
+- Decryption workflow
+- Wallet integration
+
+#### Confidential Land Platform
+Production-grade privacy-preserving urban planning platform:
+- [examples/confidential-land-platform](./examples/confidential-land-platform)
+- FHE-encrypted land registry
+- Private urban analytics
+- Role-based access control
+- Smart contract integration with Solidity
+- **Live Demo:** [https://land-platform-chi.vercel.app/](https://land-platform-chi.vercel.app/)
 
 ## 🎬 Video Demonstration
 
@@ -116,49 +202,95 @@ See `demo.mp4` for a complete walkthrough of:
 - Testing encrypted operations
 - Wallet integration
 
-## 🔧 Configuration
+## 📚 Documentation
+
+Complete documentation available in the [docs](./docs) directory:
+
+- **[Getting Started](./docs/getting-started.md)** - Installation and setup guide
+- **[API Reference](./docs/api-reference.md)** - Complete API documentation
+- **[Examples](./docs/examples.md)** - Real-world usage examples
+- **[Deployment](./docs/deployment.md)** - Production deployment guide
+
+### Quick Links
+
+- [SDK Package README](./packages/fhevm-sdk/README.md)
+- [Next.js Template](./templates/nextjs/README.md)
+- [Zama Documentation](https://docs.zama.ai/)
+
+## 🔧 SDK Configuration
+
+```typescript
+interface FhevmConfig {
+  network: any;              // Ethereum provider
+  gatewayUrl?: string;       // FHE gateway (default: 'https://gateway.zama.ai')
+  aclAddress?: string;       // ACL contract address (optional)
+}
+```
 
 ### Environment Variables
 
-Create `.env` file with:
-
 ```env
-PRIVATE_KEY=your_private_key_here
-SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR_KEY
-WALLETCONNECT_PROJECT_ID=your_project_id
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_project_id
+NEXT_PUBLIC_FHE_GATEWAY_URL=https://gateway.zama.ai
 ```
 
-### Network Configuration
+## 🏗️ Development
 
-Supports:
-- Sepolia Testnet (default)
-- Local Hardhat Network
-- Custom FHE networks
-
-## 🧪 Testing
+### Building All Packages
 
 ```bash
-# Run all tests
-npm test
+# Build all SDK packages
+npm run build:all
 
-# Run with coverage
-npm run test:coverage
-
-# Run gas report
-npm run test:gas
-
-# Test specific file
-npx hardhat test test/YourContract.test.js
+# Or build individually
+npm run build:sdk          # Build fhe-sdk
+npm run build:fhevm-sdk    # Build fhevm-sdk
+npm run build:utils        # Build fhe-utils
 ```
 
-## 📦 Building
+### SDK Development
 
 ```bash
-# Build frontend
+cd packages/fhevm-sdk
+
+# Install dependencies
+npm install
+
+# Build SDK
 npm run build
 
-# Preview production build
-npm run preview
+# Watch mode
+npm run dev
+```
+
+### Running Examples
+
+```bash
+# Run confidential land platform
+npm run dev
+
+# Run Next.js complete template
+npm run dev:nextjs
+
+# Or run specific examples
+cd examples/nextjs-complete-template
+npm install
+npm run dev
+
+cd examples/nextjs-fhe-demo
+npm install
+npm run dev
+
+cd examples/confidential-land-platform
+npm install
+npm run dev
+```
+
+### Clean Build Artifacts
+
+```bash
+# Clean all build artifacts
+npm run clean
 ```
 
 ## 🔐 Security Best Practices
@@ -169,26 +301,52 @@ npm run preview
 4. **Audit smart contracts** - Before mainnet deployment
 5. **Test thoroughly** - Cover all encryption scenarios
 
-## 🛠️ Development Tools
+## 🎬 Video Demonstration
 
-### Smart Contracts
-- Hardhat - Development environment
-- OpenZeppelin - Security libraries
-- Zama fhEVM - FHE functionality
-- Ethers.js - Blockchain interaction
+See [demo.mp4](./demo.mp4) for a complete walkthrough covering:
+- SDK architecture and design decisions
+- Setting up the development environment
+- Framework-agnostic core implementation
+- React adapter usage
+- Building with Next.js template
+- Encryption/decryption workflow
+- Production deployment
 
-### Frontend
-- Vite - Build tool
-- React 18 - UI framework
-- TypeScript - Type safety
-- Tailwind CSS - Styling
-- RainbowKit - Wallet integration
+## 🛠️ Technology Stack
+
+### SDK Packages
+- **TypeScript** - Type safety and developer experience
+- **fhevmjs** - Zama's official FHE library
+- **Ethers.js** - Blockchain interaction
+
+### React Integration
+- **React 18** - Hooks and context API
+- **TypeScript** - Full type definitions
+- **Framework Agnostic Core** - Use with any React meta-framework
+
+### Examples & Templates
+- **Next.js 14** - App Router with API routes
+- **React 18** - UI framework
+- **Vite** - Fast build tool
+- **Tailwind CSS** - Utility-first styling
+- **RainbowKit** - Wallet connection
+- **wagmi** - Ethereum React hooks
+- **Hardhat** - Smart contract development (for Land Platform)
+
+## 🌟 Key Design Decisions
+
+1. **Framework Agnostic Core**: Core functionality independent of any framework
+2. **Adapter Pattern**: Framework-specific features in separate adapters
+3. **wagmi-like API**: Familiar API for web3 developers
+4. **Type Safety**: Complete TypeScript coverage
+5. **Minimal Dependencies**: Only essential peer dependencies
+6. **Monorepo Structure**: Organized codebase for SDK and examples
 
 ## 📖 Resources
 
 - [Zama Documentation](https://docs.zama.ai/)
 - [fhEVM Guide](https://docs.zama.ai/fhevm)
-- [Hardhat Docs](https://hardhat.org/docs)
+- [Next.js Documentation](https://nextjs.org/docs)
 - [React Documentation](https://react.dev/)
 
 ## 🤝 Contributing
@@ -205,18 +363,43 @@ Contributions welcome! Please:
 
 MIT License - see [LICENSE](LICENSE) file for details
 
-## 🏆 Competition Submission
+## 🏆 Bounty Submission
 
-This template was created for the Zama FHE Competition 2025, demonstrating practical applications of fully homomorphic encryption in decentralized applications.
+This SDK was created for the Zama FHEVM Developer Tools Bounty, providing a universal solution for building privacy-preserving applications.
 
-### Submission Contents
+### Submission Highlights
 
-- ✅ Complete React + FHE template
-- ✅ Production-ready example application
+#### Core SDK (`packages/fhevm-sdk/`)
+- ✅ Framework-agnostic core implementation
+- ✅ React adapter with wagmi-style hooks
+- ✅ Complete TypeScript support
+- ✅ Encryption/decryption utilities
+- ✅ Input validation and security checks
 - ✅ Comprehensive documentation
+
+#### Templates (`templates/`)
+- ✅ Next.js 14 complete template
+- ✅ Production-ready configuration
+- ✅ SDK integration examples
+- ✅ Wallet connection setup
+
+#### Examples (`examples/`)
+- ✅ Next.js FHE demo application
+- ✅ Confidential Land Platform (production app)
+- ✅ Real-world use cases
+- ✅ Live deployment
+
+#### Documentation (`docs/`)
+- ✅ Getting started guide
+- ✅ Complete API reference
+- ✅ Usage examples
+- ✅ Deployment guide
+
+#### Deliverables
 - ✅ Video demonstration (demo.mp4)
-- ✅ Test coverage
-- ✅ Deployment scripts
+- ✅ GitHub repository with full history
+- ✅ Live demo deployment
+- ✅ Comprehensive README
 
 ## 📧 Contact
 

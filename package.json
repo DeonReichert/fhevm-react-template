@@ -10,8 +10,12 @@
   "scripts": {
     "build": "npm run build --workspaces",
     "dev": "npm run dev --workspace=examples/confidential-land-platform",
+    "dev:nextjs": "npm run dev --workspace=examples/nextjs-complete-template",
     "build:sdk": "npm run build --workspace=packages/fhe-sdk",
-    "clean": "rm -rf packages/*/dist examples/*/dist"
+    "build:fhevm-sdk": "npm run build --workspace=packages/fhevm-sdk",
+    "build:utils": "npm run build --workspace=packages/fhe-utils",
+    "build:all": "npm run build:sdk && npm run build:fhevm-sdk && npm run build:utils",
+    "clean": "rm -rf packages/*/dist examples/*/dist examples/*/.next"
   },
   "keywords": [
     "fhe",
