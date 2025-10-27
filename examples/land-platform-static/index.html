@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confidential Land Platform - FHE Urban Planning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .tab-navigation {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .tab-btn {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-btn:hover {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            box-shadow: 0 5px 15px rgba(149, 165, 166, 0.3);
+        }
+
+        .status-panel {
+            background: #e8f5e8;
+            border: 1px solid #c3e6c3;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .status-panel.error {
+            background: #ffeaea;
+            border-color: #ffcccc;
+        }
+
+        .status-panel.warning {
+            background: #fff3cd;
+            border-color: #ffeaa7;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #667eea;
+        }
+
+        .info-card h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .crypto-info {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-top: 10px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .privacy-notice {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .privacy-notice h4 {
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tab-navigation {
+                flex-wrap: wrap;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏙️ Confidential Land Platform</h1>
+            <p>Private Urban Planning with Fully Homomorphic Encryption</p>
+        </div>
+
+        <div class="content">
+            <div class="privacy-notice">
+                <h4>🔒 Privacy Protection</h4>
+                <p>All sensitive land data is encrypted using FHE technology, ensuring complete privacy while enabling collaborative urban planning analysis.</p>
+            </div>
+
+            <div class="tab-navigation">
+                <button class="tab-btn active" onclick="switchTab('register')">Register Zone</button>
+                <button class="tab-btn" onclick="switchTab('project')">Submit Project</button>
+                <button class="tab-btn" onclick="switchTab('metrics')">Update Metrics</button>
+                <button class="tab-btn" onclick="switchTab('analysis')">Analysis Tools</button>
+                <button class="tab-btn" onclick="switchTab('management')">Management</button>
+            </div>
+
+            <!-- Register Zone Tab -->
+            <div id="register" class="tab-content active">
+                <div class="form-section">
+                    <h3>🏘️ Register Confidential Land Zone</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="zoneArea">Land Area (sq meters)</label>
+                            <input type="number" id="zoneArea" placeholder="e.g., 5000">
+                        </div>
+                        <div class="form-group">
+                            <label for="zonePopulation">Population Density</label>
+                            <input type="number" id="zonePopulation" placeholder="e.g., 1200">
+                        </div>
+                        <div class="form-group">
+                            <label for="zoneValue">Land Value per sq meter</label>
+                            <input type="number" id="zoneValue" placeholder="e.g., 850">
+                        </div>
+                        <div class="form-group">
+                            <label for="zoningType">Zoning Type</label>
+                            <select id="zoningType">
+                                <option value="1">Residential</option>
+                                <option value="2">Commercial</option>
+                                <option value="3">Industrial</option>
+                                <option value="4">Mixed Use</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="publicDescription">Public Description</label>
+                        <textarea id="publicDescription" rows="3" placeholder="Non-sensitive public information about the zone..."></textarea>
+                    </div>
+                    <button class="btn" onclick="registerZone()">🔒 Register Confidential Zone</button>
+                </div>
+            </div>
+
+            <!-- Submit Project Tab -->
+            <div id="project" class="tab-content">
+                <div class="form-section">
+                    <h3>🏗️ Submit Planning Project</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="projectBudget">Project Budget</label>
+                            <input type="number" id="projectBudget" placeholder="e.g., 2500000">
+                        </div>
+                        <div class="form-group">
+                            <label for="impactScore">Environmental Impact (0-100)</label>
+                            <input type="number" id="impactScore" min="0" max="100" placeholder="e.g., 25">
+                        </div>
+                        <div class="form-group">
+                            <label for="timeline">Timeline (days)</label>
+                            <input type="number" id="timeline" placeholder="e.g., 365">
+                        </div>
+                        <div class="form-group">
+                            <label for="targetZone">Target Zone ID</label>
+                            <input type="number" id="targetZone" placeholder="e.g., 1">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectName">Project Name</label>
+                        <input type="text" id="projectName" placeholder="e.g., Sustainable Housing Development">
+                    </div>
+                    <button class="btn" onclick="submitProject()">🔒 Submit Confidential Project</button>
+                </div>
+            </div>
+
+            <!-- Update Metrics Tab -->
+            <div id="metrics" class="tab-content">
+                <div class="form-section">
+                    <h3>📊 Update Development Metrics</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="metricsZoneId">Zone ID</label>
+                            <input type="number" id="metricsZoneId" placeholder="e.g., 1">
+                        </div>
+                        <div class="form-group">
+                            <label for="densityIndex">Density Index</label>
+                            <input type="number" id="densityIndex" placeholder="e.g., 750">
+                        </div>
+                        <div class="form-group">
+                            <label for="trafficVolume">Traffic Volume</label>
+                            <input type="number" id="trafficVolume" placeholder="e.g., 5500">
+                        </div>
+                        <div class="form-group">
+                            <label for="greenSpace">Green Space Ratio (0-100%)</label>
+                            <input type="number" id="greenSpace" min="0" max="100" placeholder="e.g., 35">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="infrastructureScore">Infrastructure Score (0-100)</label>
+                        <input type="number" id="infrastructureScore" min="0" max="100" placeholder="e.g., 78">
+                    </div>
+                    <button class="btn" onclick="updateMetrics()">🔒 Update Confidential Metrics</button>
+                </div>
+            </div>
+
+            <!-- Analysis Tools Tab -->
+            <div id="analysis" class="tab-content">
+                <div class="form-section">
+                    <h3>🔍 Confidential Analysis Tools</h3>
+
+                    <div class="info-card">
+                        <h4>Zone Value Comparison</h4>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="compareZone1">Zone 1 ID</label>
+                                <input type="number" id="compareZone1" placeholder="e.g., 1">
+                            </div>
+                            <div class="form-group">
+                                <label for="compareZone2">Zone 2 ID</label>
+                                <input type="number" id="compareZone2" placeholder="e.g., 2">
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" onclick="compareZones()">🔒 Compare Zone Values</button>
+                    </div>
+
+                    <div class="info-card">
+                        <h4>Development Potential Analysis</h4>
+                        <div class="form-group">
+                            <label for="analysisZoneId">Zone ID</label>
+                            <input type="number" id="analysisZoneId" placeholder="e.g., 1">
+                        </div>
+                        <button class="btn btn-secondary" onclick="analyzeDevelopment()">🔒 Calculate Development Potential</button>
+                    </div>
+
+                    <div class="info-card">
+                        <h4>Urban Planning Analysis</h4>
+                        <div class="form-group">
+                            <label for="urbanAnalysisZone">Zone ID</label>
+                            <input type="number" id="urbanAnalysisZone" placeholder="e.g., 1">
+                        </div>
+                        <button class="btn btn-secondary" onclick="requestUrbanAnalysis()">🔒 Request Urban Analysis</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Management Tab -->
+            <div id="management" class="tab-content">
+                <div class="form-section">
+                    <h3>⚙️ Platform Management</h3>
+
+                    <div class="info-card">
+                        <h4>Authorize Urban Planner</h4>
+                        <div class="form-group">
+                            <label for="plannerAddress">Planner Address</label>
+                            <input type="text" id="plannerAddress" placeholder="0x...">
+                        </div>
+                        <button class="btn btn-secondary" onclick="authorizePlanner()">✅ Authorize Planner</button>
+                    </div>
+
+                    <div class="info-card">
+                        <h4>Approve Project</h4>
+                        <div class="form-group">
+                            <label for="approveProjectId">Project ID</label>
+                            <input type="number" id="approveProjectId" placeholder="e.g., 1">
+                        </div>
+                        <button class="btn btn-secondary" onclick="approveProject()">✅ Approve Project</button>
+                    </div>
+
+                    <div class="info-card">
+                        <h4>Platform Information</h4>
+                        <button class="btn btn-secondary" onclick="getPlatformInfo()">ℹ️ Get Platform Info</button>
+                        <div id="platformInfo"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="status" class="status-panel" style="display: none;"></div>
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Processing confidential transaction...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script>
+        let provider;
+        let signer;
+        let contract;
+        let userAccount;
+
+        const CONTRACT_ADDRESS = "0x7B0073dcCA6837CB66a2cFB3B7c992E3E9BDf3b9";
+        const CONTRACT_ABI = [
+            {
+                "inputs": [],
+                "stateMutability": "nonpayable",
+                "type": "constructor"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": true,
+                        "internalType": "uint256",
+                        "name": "zoneId",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "DevelopmentAnalysisRequested",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": true,
+                        "internalType": "uint256",
+                        "name": "zoneId",
+                        "type": "uint256"
+                    },
+                    {
+                        "indexed": true,
+                        "internalType": "address",
+                        "name": "updater",
+                        "type": "address"
+                    }
+                ],
+                "name": "MetricsUpdated",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": true,
+                        "internalType": "address",
+                        "name": "planner",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": true,
+                        "internalType": "address",
+                        "name": "authority",
+                        "type": "address"
+                    }
+                ],
+                "name": "PlannerAuthorized",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": true,
+                        "internalType": "uint256",
+                        "name": "projectId",
+                        "type": "uint256"
+                    },
+                    {
+                        "indexed": true,
+                        "internalType": "address",
+                        "name": "approver",
+                        "type": "address"
+                    }
+                ],
+                "name": "ProjectApproved",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": true,
+                        "internalType": "uint256",
+                        "name": "projectId",
+                        "type": "uint256"
+                    },
+                    {
+                        "indexed": true,
+                        "internalType": "address",
+                        "name": "proposer",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": false,
+                        "internalType": "string",
+                        "name": "projectName",
+                        "type": "string"
+                    },
+                    {
+                        "indexed": false,
+                        "internalType": "uint256",
+                        "name": "targetZoneId",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "ProjectSubmitted",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": true,
+                        "internalType": "uint256",
+                        "name": "zoneId",
+                        "type": "uint256"
+                    },
+                    {
+                        "indexed": true,
+                        "internalType": "address",
+                        "name": "owner",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": false,
+                        "internalType": "string",
+                        "name": "description",
+                        "type": "string"
+                    }
+                ],
+                "name": "ZoneRegistered",
+                "type": "event"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "_projectId",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "approveProject",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "_planner",
+                        "type": "address"
+                    }
+                ],
+                "name": "authorizePlanner",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "name": "authorizedPlanners",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "_zoneId",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "calculateDevelopmentPotential",
+                "outputs": [
+                    {
+                        "internalType": "bytes32",
+                        "name": "",
+                        "type": "bytes32"
+                    }
+                ],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "cityPlanningAuthority",
+                "outputs": [
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "_zoneId1",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "_zoneId2",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "compareZoneValues",
+                "outputs": [
+                    {
+                        "internalType": "bytes32",
+                        "name": "",
+                        "type": "bytes32"
+                    }
+                ],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "_projectId",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "getProjectPublicInfo",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "isApproved",
+                        "type": "bool"
+                    },
+                    {
+                        "internalType": "bool",
+                        "name": "isActive",
+                        "type": "bool"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "proposer",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "projectName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "targetZoneId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "submissionTime",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getTotalProjects",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getTotalZones",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "_zoneId",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "getZonePublicInfo",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "isRegistered",
+                        "type": "bool"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "owner",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "publicDescription",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "registrationTime",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "_address",
+                        "type": "address"
+                    }
+                ],
+                "name": "isAuthorizedPlanner",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "_address",
+                        "type": "address"
+                    }
+                ],
+                "name": "isLandOwner",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "name": "landOwners",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "metrics",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "metricsSet",
+                        "type": "bool"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "lastUpdate",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "nextProjectId",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "nextZoneId",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "projects",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "isApproved",
+                        "type": "bool"
+                    },
+                    {
+                        "internalType": "bool",
+                        "name": "isActive",
+                        "type": "bool"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "proposer",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "projectName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "targetZoneId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "submissionTime",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint32",
+                        "name": "_area",
+                        "type": "uint32"
+                    },
+                    {
+                        "internalType": "uint32",
+                        "name": "_population",
+                        "type": "uint32"
+                    },
+                    {
+                        "internalType": "uint32",
+                        "name": "_value",
+                        "type": "uint32"
+                    },
+                    {
+                        "internalType": "uint16",
+                        "name": "_zoningType",
+                        "type": "uint16"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "_publicDescription",
+                        "type": "string"
+                    }
+                ],
+                "name": "registerLandZone",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "_zoneId",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "requestUrbanAnalysis",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "_planner",
+                        "type": "address"
+                    }
+                ],
+                "name": "revokePlannerAuthorization",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint32",
+                        "name": "_budget",
+                        "type": "uint32"
+                    },
+                    {
+                        "internalType": "uint16",
+                        "name": "_impactScore",
+                        "type": "uint16"
+                    },
+                    {
+                        "internalType": "uint32",
+                        "name": "_timeline",
+                        "type": "uint32"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "_projectName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "_targetZoneId",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "submitPlanningProject",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "_zoneId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint32",
+                        "name": "_densityIndex",
+                        "type": "uint32"
+                    },
+                    {
+                        "internalType": "uint32",
+                        "name": "_trafficVolume",
+                        "type": "uint32"
+                    },
+                    {
+                        "internalType": "uint16",
+                        "name": "_greenSpaceRatio",
+                        "type": "uint16"
+                    },
+                    {
+                        "internalType": "uint16",
+                        "name": "_infrastructureScore",
+                        "type": "uint16"
+                    }
+                ],
+                "name": "updateDevelopmentMetrics",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "zones",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "isRegistered",
+                        "type": "bool"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "owner",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "publicDescription",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "registrationTime",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ];
+
+        // Initialize ethers.js and contract
+        async function initWeb3() {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    provider = new ethers.providers.Web3Provider(window.ethereum);
+                    await provider.send("eth_requestAccounts", []);
+                    signer = provider.getSigner();
+                    userAccount = await signer.getAddress();
+                    contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+                    const network = await provider.getNetwork();
+                    if (network.chainId !== 11155111) {
+                        showStatus('Please connect to Sepolia testnet', 'warning');
+                        return;
+                    }
+
+                    showStatus('Connected to Sepolia! Address: ' + userAccount.substring(0, 6) + '...', 'success');
+                } catch (error) {
+                    showStatus('Failed to connect: ' + error.message, 'error');
+                }
+            } else {
+                showStatus('Please install MetaMask to use this application', 'error');
+            }
+        }
+
+        // Tab switching functionality
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Register new zone
+        async function registerZone() {
+            if (!contract) {
+                await initWeb3();
+                if (!contract) return;
+            }
+
+            const area = document.getElementById('zoneArea').value;
+            const population = document.getElementById('zonePopulation').value;
+            const value = document.getElementById('zoneValue').value;
+            const zoningType = document.getElementById('zoningType').value;
+            const description = document.getElementById('publicDescription').value;
+
+            if (!area || !population || !value || !description) {
+                showStatus('Please fill in all fields', 'error');
+                return;
+            }
+
+            try {
+                showLoading(true);
+                showStatus('Registering confidential land zone...', 'info');
+
+                const tx = await contract.registerLandZone(
+                    parseInt(area),
+                    parseInt(population),
+                    parseInt(value),
+                    parseInt(zoningType),
+                    description
+                );
+                await tx.wait();
+
+                showStatus('Land zone registered successfully with encrypted data!', 'success');
+            } catch (error) {
+                showStatus('Error registering zone: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Submit planning project
+        async function submitProject() {
+            if (!contract) {
+                await initWeb3();
+                if (!contract) return;
+            }
+
+            const budget = document.getElementById('projectBudget').value;
+            const impact = document.getElementById('impactScore').value;
+            const timeline = document.getElementById('timeline').value;
+            const targetZone = document.getElementById('targetZone').value;
+            const projectName = document.getElementById('projectName').value;
+
+            if (!budget || !impact || !timeline || !targetZone || !projectName) {
+                showStatus('Please fill in all fields', 'error');
+                return;
+            }
+
+            try {
+                showLoading(true);
+                showStatus('Submitting confidential project proposal...', 'info');
+
+                const tx = await contract.submitPlanningProject(
+                    parseInt(budget),
+                    parseInt(impact),
+                    parseInt(timeline),
+                    projectName,
+                    parseInt(targetZone)
+                );
+                await tx.wait();
+
+                showStatus('Project submitted successfully with encrypted data!', 'success');
+            } catch (error) {
+                showStatus('Error submitting project: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Update development metrics
+        async function updateMetrics() {
+            if (!contract) {
+                await initWeb3();
+                if (!contract) return;
+            }
+
+            const zoneId = document.getElementById('metricsZoneId').value;
+            const density = document.getElementById('densityIndex').value;
+            const traffic = document.getElementById('trafficVolume').value;
+            const greenSpace = document.getElementById('greenSpace').value;
+            const infrastructure = document.getElementById('infrastructureScore').value;
+
+            if (!zoneId || !density || !traffic || !greenSpace || !infrastructure) {
+                showStatus('Please fill in all fields', 'error');
+                return;
+            }
+
+            try {
+                showLoading(true);
+                showStatus('Updating confidential development metrics...', 'info');
+
+                const tx = await contract.updateDevelopmentMetrics(
+                    parseInt(zoneId),
+                    parseInt(density),
+                    parseInt(traffic),
+                    parseInt(greenSpace),
+                    parseInt(infrastructure)
+                );
+                await tx.wait();
+
+                showStatus('Development metrics updated successfully!', 'success');
+            } catch (error) {
+                showStatus('Error updating metrics: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Compare zones
+        async function compareZones() {
+            if (!contract) {
+                await initWeb3();
+                if (!contract) return;
+            }
+
+            const zone1 = document.getElementById('compareZone1').value;
+            const zone2 = document.getElementById('compareZone2').value;
+
+            if (!zone1 || !zone2) {
+                showStatus('Please enter both zone IDs', 'error');
+                return;
+            }
+
+            try {
+                showLoading(true);
+                showStatus('Performing confidential zone comparison...', 'info');
+
+                const result = await contract.compareZoneValues(
+                    parseInt(zone1),
+                    parseInt(zone2)
+                );
+
+                showStatus('Zone comparison completed! Encrypted result: ' + result, 'success');
+            } catch (error) {
+                showStatus('Error comparing zones: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Analyze development potential
+        async function analyzeDevelopment() {
+            if (!contract) {
+                await initWeb3();
+                if (!contract) return;
+            }
+
+            const zoneId = document.getElementById('analysisZoneId').value;
+
+            if (!zoneId) {
+                showStatus('Please enter zone ID', 'error');
+                return;
+            }
+
+            try {
+                showLoading(true);
+                showStatus('Calculating confidential development potential...', 'info');
+
+                const result = await contract.calculateDevelopmentPotential(
+                    parseInt(zoneId)
+                );
+
+                showStatus('Development potential calculated! Encrypted result: ' + result, 'success');
+            } catch (error) {
+                showStatus('Error analyzing development: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Request urban analysis
+        async function requestUrbanAnalysis() {
+            if (!contract) {
+                await initWeb3();
+                if (!contract) return;
+            }
+
+            const zoneId = document.getElementById('urbanAnalysisZone').value;
+
+            if (!zoneId) {
+                showStatus('Please enter zone ID', 'error');
+                return;
+            }
+
+            try {
+                showLoading(true);
+                showStatus('Requesting confidential urban analysis...', 'info');
+
+                const tx = await contract.requestUrbanAnalysis(
+                    parseInt(zoneId)
+                );
+                await tx.wait();
+
+                showStatus('Urban analysis requested successfully!', 'success');
+            } catch (error) {
+                showStatus('Error requesting analysis: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Authorize planner
+        async function authorizePlanner() {
+            if (!contract) {
+                await initWeb3();
+                if (!contract) return;
+            }
+
+            const plannerAddress = document.getElementById('plannerAddress').value;
+
+            if (!plannerAddress) {
+                showStatus('Please enter planner address', 'error');
+                return;
+            }
+
+            try {
+                showLoading(true);
+                showStatus('Authorizing urban planner...', 'info');
+
+                const tx = await contract.authorizePlanner(plannerAddress);
+                await tx.wait();
+
+                showStatus('Planner authorized successfully!', 'success');
+            } catch (error) {
+                showStatus('Error authorizing planner: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Approve project
+        async function approveProject() {
+            if (!contract) {
+                await initWeb3();
+                if (!contract) return;
+            }
+
+            const projectId = document.getElementById('approveProjectId').value;
+
+            if (!projectId) {
+                showStatus('Please enter project ID', 'error');
+                return;
+            }
+
+            try {
+                showLoading(true);
+                showStatus('Approving project...', 'info');
+
+                const tx = await contract.approveProject(parseInt(projectId));
+                await tx.wait();
+
+                showStatus('Project approved successfully!', 'success');
+            } catch (error) {
+                showStatus('Error approving project: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Get platform info
+        async function getPlatformInfo() {
+            if (!contract) {
+                await initWeb3();
+                if (!contract) return;
+            }
+
+            try {
+                showLoading(true);
+
+                const totalZones = await contract.getTotalZones();
+                const totalProjects = await contract.getTotalProjects();
+                const authority = await contract.cityPlanningAuthority();
+
+                const infoHtml = `
+                    <h4>Platform Statistics</h4>
+                    <p><strong>Total Zones:</strong> ${totalZones}</p>
+                    <p><strong>Total Projects:</strong> ${totalProjects}</p>
+                    <p><strong>Planning Authority:</strong> ${authority}</p>
+                `;
+
+                document.getElementById('platformInfo').innerHTML = infoHtml;
+                showStatus('Platform information updated!', 'success');
+            } catch (error) {
+                showStatus('Error getting platform info: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Utility functions
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = 'status-panel ' + type;
+            statusDiv.style.display = 'block';
+
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function showLoading(show) {
+            const loadingDiv = document.getElementById('loading');
+            loadingDiv.classList.toggle('show', show);
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', initWeb3);
+    </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "confidential-land-platform",
+  "version": "1.0.0",
+  "description": "Confidential Land Platform with FHE Urban Planning",
+  "main": "index.html",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'Static build complete'",
+    "start": "echo 'Static site ready for deployment'"
+  },
+  "keywords": [
+    "fhe",
+    "blockchain",
+    "privacy",
+    "land-planning",
+    "urban-development",
+    "zama"
+  ],
+  "author": "Confidential Land Platform",
+  "license": "MIT"
+}
